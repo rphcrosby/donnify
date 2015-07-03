@@ -62,7 +62,15 @@ $app->post('/api/queue/add', function(Request $request) use ($app)
 $app->get('/api/queue/play', function() use ($app)
 {
     $redis = app('redis');
-    return response()->json($redis->lpop('r-1234567890'));
+    return response()->json($redis->lrange('r-1234567890', 0, 0));
+});
+
+// Play the current song in the queue
+$app->get('/api/queue/pop', function() use ($app)
+{
+    $redis = app('redis');
+    $redis->lpop('r-1234567890');
+    return response()->json();
 });
 
 // Pause the current song in the queue

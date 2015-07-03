@@ -85,7 +85,7 @@ var updateBar = function() {
     var currentSeconds = ("0" + (App.currentTime - (currentMinutes * 60))).slice(-2);
 
     var totalMinutes = ("0" + trackDuration.minutes).slice(-2);
-    var totalSeconds = ("0" + (trackDuration.seconds - (trackDuration.minutes * 60))).slice(-2);
+    var totalSeconds = ("0" + trackDuration.seconds).slice(-2);
 
     $('.player .player__track .bar .current').css('width', percentage + '%');
     $('.player .player__track .bar .bubble').css('left', percentage + '%');
@@ -96,18 +96,23 @@ var updateBar = function() {
     if (currentMinutes == totalMinutes && currentSeconds == totalSeconds) {
         pause();
         App.track = null;
-        play();
+
+        $.get('/api/queue/pop', function() {
+            play();
+            refreshQueue();
+            resetBar();
+        });
     }
 };
 
+var resetBar = function() {
+    $('.player .player__track .bar .current').css('width', '0%');
+    $('.player .player__track .bar .bubble').css('left', '0%');
+    $('.player .player__track .bar .bubble').text('00:00');
+    $('.player .player__duration').text('00:00');
+};
+
 var play = function(ev) {
-
-    App.playing = true;
-
-    App.timer = setInterval(function() {
-        App.currentTime += 1;
-        updateBar();
-    }, 1000);
 
     if (App.track) {
         playTrack(App.track, App.currentTime);
@@ -117,23 +122,33 @@ var play = function(ev) {
         App.currentTime = 0;
 
         $.get('/api/queue/play', function(track) {
-            var track = JSON.parse(track);
 
-            if (track.details == undefined) {
-                getYoutubeDetails(track.id, function(details) {
-                    track.details = details;
-                    App.track = track;
-                });
+            if (track.length > 0) {
+                var track = JSON.parse(track);
+
+                if (track.details == undefined) {
+                    getYoutubeDetails(track.id, function(details) {
+                        track.details = details;
+                        App.track = track;
+                    });
+                }
+
+                playTrack(track);
+
+                refreshQueue();
             }
-
-            playTrack(track);
-
-            refreshQueue();
         });
     }
 };
 
 var playTrack = function(track, time) {
+
+    App.playing = true;
+
+    App.timer = setInterval(function() {
+        App.currentTime += 1;
+        updateBar();
+    }, 1000);
 
     switch (track.type) {
 
