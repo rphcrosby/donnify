@@ -11,6 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('redis', function($app)
+        {
+            return new Predis\Client();
+        });
     }
 }

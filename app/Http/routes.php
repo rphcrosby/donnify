@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -34,38 +36,48 @@ $app->get('/api/tracks/playing', function() use ($app)
 
 });
 
-// List out the current track queue
-$app->get('/api/tracks/queue', function() use ($app)
-{
-
-});
-
 // List the top tracks that are played
 $app->get('/api/tracks/top', function() use ($app)
 {
 
 });
 
-// Add a track to the queue
-$app->get('/api/queue/add', function() use ($app)
+// List out the current track queue
+$app->get('/api/queue/list', function() use ($app)
 {
+    $redis = app('redis');
+    return response()->json($redis->lrange('r-1234567890', 0, -1));
+});
 
+// Add a track to the queue
+$app->post('/api/queue/add', function(Request $request) use ($app)
+{
+    $redis = app('redis');
+    $track = $request->get('track');
+    $redis->rpush('r-1234567890', $track);
+    return response()->json();
 });
 
 // Play the current song in the queue
 $app->get('/api/queue/play', function() use ($app)
 {
-
+    $redis = app('redis');
+    return response()->json($redis->lpop('r-1234567890'));
 });
 
 // Pause the current song in the queue
-$app->get('/api/queue/pause', function() use ($app)
+$app->post('/api/queue/pause', function() use ($app)
 {
-
+    $redis = app('redis');
+    $track = $request->get('track');
+    $redis->lpush('r-1234567890', $track);
+    return response()->json();
 });
 
 // Remove a song from the end of the queue
 $app->get('/api/queue/remove', function() use ($app)
 {
-
+    $redis = app('redis');
+    $redis->pop('r-1234567890');
+    return response()->json();
 });

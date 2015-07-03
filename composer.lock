@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fbf3372757b21a22087de98a1d832021",
+    "hash": "0e51f064d8d5f5985667061c4f430ac2",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -982,6 +982,51 @@
             "description": "The Illuminate Queue package.",
             "homepage": "http://laravel.com",
             "time": "2015-06-13 12:56:26"
+        },
+        {
+            "name": "illuminate/redis",
+            "version": "v5.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/redis.git",
+                "reference": "14486deef4fd503fb3af0f1a99730756d4d1bbfd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/redis/zipball/14486deef4fd503fb3af0f1a99730756d4d1bbfd",
+                "reference": "14486deef4fd503fb3af0f1a99730756d4d1bbfd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.1.*",
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.9",
+                "predis/predis": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Redis\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Redis package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-06-01 15:39:11"
         },
         {
             "name": "illuminate/session",
