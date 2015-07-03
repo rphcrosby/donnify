@@ -46,15 +46,32 @@ $app->get('/api/tracks/top', function() use ($app)
 $app->get('/api/queue/list', function() use ($app)
 {
     $redis = app('redis');
-    return response()->json($redis->lrange('r-1234567890', 0, -1));
+    $tracks = [];
+
+    // Get tracks in a room
+    $tracks = array_map(function($id) use ($redis)
+    {
+        return [
+            'track' => $redis->get($id),
+            'score' => $redis->zscore('r-1234567890', $id)
+        ];
+    }, $redis->zrevrangebyscore('r-1234567890', '+inf', '-inf'));
+
+    return response()->json($tracks);
 });
 
 // Add a track to the queue
 $app->post('/api/queue/add', function(Request $request) use ($app)
 {
     $redis = app('redis');
-    $track = $request->get('track');
-    $redis->rpush('r-1234567890', $track);
+    $track = json_decode($request->get('track'));
+
+    // Store the track information
+    $redis->set($track->id, json_encode($track));
+
+    // Add the track to the room
+    $redis->zadd('r-1234567890', 0, $track->id);
+
     return response()->json();
 });
 
@@ -62,7 +79,13 @@ $app->post('/api/queue/add', function(Request $request) use ($app)
 $app->get('/api/queue/play', function() use ($app)
 {
     $redis = app('redis');
-    return response()->json($redis->lrange('r-1234567890', 0, 0));
+
+    $tracks = array_map(function($id) use ($redis)
+    {
+        return $redis->get($id);
+    }, $redis->zrevrangebyscore('r-1234567890', '+inf', '-inf'));
+
+    return response()->json(reset($tracks));
 });
 
 // Play the current song in the queue
@@ -94,5 +117,25 @@ $app->get('/api/queue/clear', function() use ($app)
 {
     $redis = app('redis');
     $redis->del('r-1234567890');
+    return response()->json();
+});
+
+$app->post('/api/queue/upvote', function(Request $request) use ($app)
+{
+    $redis = app('redis');
+    $track = json_decode($request->get('track'));
+    return response()->json($redis->zincrby('r-1234567890', 1, $track->id));
+});
+
+$app->post('/api/queue/downvote', function(Request $request) use ($app)
+{
+    $redis = app('redis');
+    $track = json_decode($request->get('track'));
+    $redis->zincrby('r-1234567890', -1, $track->id);
+
+    if ($redis->zscore('r-1234567890', $track->id) <= -5) {
+        $redis->zrem('r-1234567890', $track->id);
+    }
+
     return response()->json();
 });

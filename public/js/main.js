@@ -199,9 +199,29 @@ var refreshQueue = function(callback) {
 
     $.get('/api/queue/list', function(queue) {
         $('.js-queue').html('');
-        _.each(queue, function(track) {
-            var track = JSON.parse(track);
-            var html = $('<li data-video=' + track.id + '>' + track.track.title + '</li>');
+        _.each(queue, function(response) {
+            var track = JSON.parse(response.track);
+
+            var html = $('<li data-video=' + track.id + '>' + track.track.title + '<span class="upvote js-upvote">' + response.score + '</span><span class="downvote js-downvote"></span></li>');
+
+            // Add upvote
+            html.find('.js-upvote').click(function() {
+                var upvote = $(this);
+                var id = upvote.parents('li');
+                $.post('/api/queue/upvote', { track: JSON.stringify(track) }, function(response) {
+                    refreshQueue();
+                });
+            });
+
+            // Add downvote
+            html.find('.js-downvote').click(function() {
+                var downvote = $(this);
+                var id = downvote.parents('li');
+                $.post('/api/queue/downvote', { track: JSON.stringify(track) }, function(response) {
+                    refreshQueue();
+                });
+            });
+
             html.appendTo($('.js-queue'));
         });
 

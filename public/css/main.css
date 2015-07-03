@@ -2,6 +2,15 @@
     box-sizing: border-box;
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 body {
     background: #3a3646; /* Old browsers */
     background: -moz-linear-gradient(top,  #3a3646 0%, #da94b2 39%, #75bdd9 100%); /* FF3.6+ */
@@ -62,6 +71,33 @@ body {
     padding-left: 70px;
     font-size: 18px;
     color: #fff;
+    position: relative;
+}
+
+.queue li .upvote,
+.queue li .downvote {
+    background-image: url(../img/upvote.png);
+    background-repeat: no-repeat;
+    background-position: right center;
+    cursor: pointer;
+    height: 16px;
+    width: 50px;
+    opacity: 0.4;
+    position: absolute;
+    top: 15px;
+    right: 12px;
+    font-size: 14px;
+    line-height: 40px;
+}
+
+.queue li .upvote:hover,
+.queue li .downvote:hover {
+    opacity: 1;
+}
+
+.queue li .downvote {
+    background-image: url(../img/downvote.png);
+    top: 41px;
 }
 
 .queue li.playing {

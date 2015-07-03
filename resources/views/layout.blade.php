@@ -11,18 +11,18 @@
         <div class="search">
             <input type="text" placeholder="Search" class="js-search">
 
-            <div class="results">
+            <div class="results noselect">
                 <div class="modal">
                     <ul class="js-results"></ul>
                 </div>
             </div>
         </div>
-        <ul class="queue js-queue">
+        <ul class="queue js-queue noselect">
 
         </ul>
     </div>
 
-    <div class="player">
+    <div class="player noselect">
         <div class="player__artwork"></div>
         <div class="player__title"></div>
         <div class="player__play js-play">
@@ -48,5 +48,3 @@
     <script src="/js/main.js"></script>
 </body>
 </html>
-
-<!-- AIzaSyBK9_Su3qBVrBKdJUzDpjJmmwGu_e7Xa3I -->
