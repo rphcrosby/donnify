@@ -204,6 +204,10 @@ var refreshQueue = function(callback) {
 
             var html = $('<li data-video=' + track.id + '>' + track.track.title + '<span class="upvote js-upvote">' + response.score + '</span><span class="downvote js-downvote"></span></li>');
 
+            if (App.track && track.id == App.track.id) {
+                html.addClass('is-playing');
+            }
+
             // Add upvote
             html.find('.js-upvote').click(function() {
                 var upvote = $(this);

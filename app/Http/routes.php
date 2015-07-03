@@ -92,8 +92,9 @@ $app->get('/api/queue/play', function() use ($app)
 $app->get('/api/queue/pop', function() use ($app)
 {
     $redis = app('redis');
-    $redis->lpop('r-1234567890');
-    return response()->json();
+    $trackIds = $redis->zrange('r-1234567890', 0, -1);
+
+    return response()->json($redis->zrem('r-1234567890', reset($trackIds)));
 });
 
 // Pause the current song in the queue
