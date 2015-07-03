@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: #3a3646; /* Old browsers */
     background: -moz-linear-gradient(top,  #3a3646 0%, #da94b2 39%, #75bdd9 100%); /* FF3.6+ */
@@ -39,6 +43,8 @@ body {
     font-size: 28px;
     color: #fff;
     outline: 0;
+    position: relative;
+    z-index: 10;
 }
 
 .queue {
@@ -60,4 +66,42 @@ body {
 
 .queue li:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.2);
+}
+
+.results {
+    background-color: rgba(255, 255, 255, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.results .modal {
+    position: absolute;
+    top: 230px;
+    left: 50%;
+    margin-left: -600px;
+    width: 1200px;
+}
+
+.results .modal ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    list-style: none;
+}
+
+.results .modal li {
+    background-color: #fff;
+    height: 50px;
+    width: 100%;
+    padding-left: 16px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #333;
+}
+
+.results .modal li:nth-child(odd) {
+    background-color: #eee;
 }

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $('.search js-search').keyup(function() {
+    $('.search .js-search').keyup(function() {
         var q = $(this).val();
         searchYoutube(q, function(response) {
             displayYoutubeResults(response.items);
@@ -11,8 +11,10 @@ $(document).ready(function() {
 });
 
 var refreshQueue = function() {
+    console.debug('Refreshing queue');
+
     $.get('/api/queue/list', function(queue) {
-        $('#queue').html('');
+        $('.js-queue').html('');
         _.each(queue, function(track) {
             var track = JSON.parse(track);
             var html = $('<li data-video=' + track.id + '>' + track.track.title + '</li>');
@@ -32,10 +34,10 @@ var addYoutubeToQueue = function(ev) {
     };
 
     $.post('/api/queue/add', { track: JSON.stringify(track) }, function(response) {
-        console.log('Track added to queue');
+        console.debug('Track added to queue');
+        refreshQueue();
+        clearResults();
     });
-
-    refreshQueue();
 };
 
 var searchYoutube = _.throttle(function(query, callback) {
@@ -63,9 +65,14 @@ var playYoutube = function(code) {
     $('#youtube').html(embed);
 };
 
+var clearResults = function() {
+
+    $('.js-results').html('');
+}
+
 var displayYoutubeResults = function(items) {
 
-    $('#youtube-results').html('');
+    clearResults();
 
     for (var i in items) {
 
@@ -77,6 +84,6 @@ var displayYoutubeResults = function(items) {
 
         row.data('track', item.snippet);
 
-        row.appendTo($('#youtube-results'));
+        row.appendTo($('.js-results'));
     }
 };
