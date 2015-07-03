@@ -13,8 +13,106 @@ $(document).ready(function() {
         });
     });
 
+    $('.js-play').click(togglePlay);
+
     refreshQueue();
 });
+
+var App = {
+    playing: false,
+    track: null,
+    timer: null,
+    currentTime: 0
+};
+
+var togglePlay = function() {
+
+    if (App.playing == false) {
+        play();
+    } else {
+        pause();
+    }
+};
+
+var pause = function() {
+    App.playing = false;
+    pauseYoutube();
+    clearInterval(App.timer);
+}
+
+var pauseYoutube = function() {
+    $('#youtube').html('');
+}
+
+var play = function(ev) {
+
+    App.playing = true;
+
+    App.timer = setInterval(function() {
+        App.currentTime += 1;
+        $('.js-current-time').text(App.currentTime);
+    }, 1000);
+
+    if (App.track) {
+        playTrack(App.track, App.currentTime);
+        return;
+    } else {
+
+        App.currentTime = 0;
+
+        $.get('/api/queue/play', function(track) {
+            var track = JSON.parse(track);
+
+            if (track.details == undefined) {
+                getYoutubeDetails(track.id, function(details) {
+                    track.details = details;
+                    App.track = track;
+                });
+            }
+
+            playTrack(track);
+
+            refreshQueue();
+        });
+    }
+};
+
+var playTrack = function(track, time) {
+
+    switch (track.type) {
+
+            case 'youtube':
+                playYoutube(track.id, time);
+                break;
+        }
+}
+
+var playYoutube = function(code, time) {
+
+    if (time == undefined) {
+        time = 0;
+    }
+
+    var embed = '<iframe width="1" height="1" src="https://www.youtube.com/embed/' + code + '?autoplay=1&start=' + time + '" frameborder="0" allowfullscreen></iframe>';
+
+    $('#youtube').html(embed);
+};
+
+var getYoutubeDetails = function(code, callback) {
+
+    var url = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails';
+
+    // Add key
+    url += '&key=AIzaSyBK9_Su3qBVrBKdJUzDpjJmmwGu_e7Xa3I';
+
+    // Add video ID
+    url += '&id=' + code;
+
+    $.getJSON(url, function(response)
+    {
+        callback(response.items[0]);
+    });
+}
 
 var refreshQueue = function() {
     console.debug('Refreshing queue');
@@ -63,13 +161,6 @@ var searchYoutube = _.throttle(function(query, callback) {
         callback(json);
     });
 }, 200);
-
-var playYoutube = function(code) {
-
-    var embed = '<iframe width="1" height="1" src="https://www.youtube.com/embed/' + code + '?autoplay=1" frameborder="0" allowfullscreen></iframe>';
-
-    $('#youtube').html(embed);
-};
 
 var clearResults = function() {
 

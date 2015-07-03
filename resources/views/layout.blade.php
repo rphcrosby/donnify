@@ -22,6 +22,19 @@
         </ul>
     </div>
 
+    <div class="player">
+        <div class="player__artwork"></div>
+        <div class="player__title"></div>
+        <div class="player__play js-play"></div>
+        <div class="player__track">
+            <div class="js-current-time"></div>
+        </div>
+    </div>
+
+    <div class="providers">
+        <div id="youtube"></div>
+    </div>
+
     <div class="debug">
         <button class="js-clear">Clear Queue</button>
     </div>

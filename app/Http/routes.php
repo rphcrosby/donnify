@@ -66,7 +66,7 @@ $app->get('/api/queue/play', function() use ($app)
 });
 
 // Pause the current song in the queue
-$app->post('/api/queue/pause', function() use ($app)
+$app->post('/api/queue/pause', function(Request $request) use ($app)
 {
     $redis = app('redis');
     $track = $request->get('track');
