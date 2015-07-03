@@ -25,7 +25,10 @@
     <div class="player">
         <div class="player__artwork"></div>
         <div class="player__title"></div>
-        <div class="player__play js-play"></div>
+        <div class="player__play js-play">
+            <div class="play is-visible"></div>
+            <div class="pause"></div>
+        </div>
         <div class="player__track">
             <div class="bar">
                 <div class="bubble">0:00</div>

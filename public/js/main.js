@@ -70,6 +70,9 @@ var pause = function() {
     App.playing = false;
     pauseYoutube();
     clearInterval(App.timer);
+
+    $('.player__play .play').addClass('is-visible');
+    $('.player__play .pause').removeClass('is-visible');
 }
 
 var pauseYoutube = function() {
@@ -146,6 +149,9 @@ var playTrack = function(track, time) {
 
     App.playing = true;
 
+    $('.player__play .play').removeClass('is-visible');
+    $('.player__play .pause').addClass('is-visible');
+
     App.timer = setInterval(function() {
         App.currentTime += 1;
         updateBar();
@@ -219,6 +225,7 @@ var addYoutubeToQueue = function(ev) {
         console.debug('Track added to queue');
         refreshQueue();
         clearResults();
+        $('.js-search').val('');
     });
 };
 
