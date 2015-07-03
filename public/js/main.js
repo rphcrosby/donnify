@@ -66,6 +66,7 @@ var skipTo = function(ev) {
 };
 
 var pause = function() {
+    $('.js-queue li[data-video="' + App.track.id + '"]').removeClass('playing');
     App.playing = false;
     pauseYoutube();
     clearInterval(App.timer);
@@ -133,9 +134,9 @@ var play = function(ev) {
                     });
                 }
 
-                playTrack(track);
-
-                refreshQueue();
+                refreshQueue(function() {
+                    playTrack(track);
+                });
             }
         });
     }
@@ -150,12 +151,14 @@ var playTrack = function(track, time) {
         updateBar();
     }, 1000);
 
+    $('.js-queue li[data-video="' + track.id + '"]').addClass('playing');
+
     switch (track.type) {
 
-            case 'youtube':
-                playYoutube(track.id, time);
-                break;
-        }
+        case 'youtube':
+            playYoutube(track.id, time);
+            break;
+    }
 }
 
 var playYoutube = function(code, time) {
@@ -185,7 +188,7 @@ var getYoutubeDetails = function(code, callback) {
     });
 }
 
-var refreshQueue = function() {
+var refreshQueue = function(callback) {
     console.debug('Refreshing queue');
 
     $.get('/api/queue/list', function(queue) {
@@ -195,6 +198,10 @@ var refreshQueue = function() {
             var html = $('<li data-video=' + track.id + '>' + track.track.title + '</li>');
             html.appendTo($('.js-queue'));
         });
+
+        if (callback !== undefined) {
+            callback();
+        }
     });
 };
 
