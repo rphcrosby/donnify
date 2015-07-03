@@ -81,3 +81,10 @@ $app->get('/api/queue/remove', function() use ($app)
     $redis->pop('r-1234567890');
     return response()->json();
 });
+
+$app->get('/api/queue/clear', function() use ($app)
+{
+    $redis = app('redis');
+    $redis->del('r-1234567890');
+    return response()->json();
+});

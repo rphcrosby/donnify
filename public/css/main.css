@@ -70,11 +70,16 @@ body {
 
 .results {
     background-color: rgba(255, 255, 255, 0.4);
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+}
+
+.results.is-visible {
+    display: block;
 }
 
 .results .modal {
@@ -104,4 +109,23 @@ body {
 
 .results .modal li:nth-child(odd) {
     background-color: #eee;
+}
+
+.debug {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    left: 0;
+    height: 80px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.debug button {
+    width: 200px;
+    height: 60px;
+    background-color: white;
+    border: 0;
+    font-size: 14px;
 }

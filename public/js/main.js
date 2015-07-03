@@ -7,6 +7,12 @@ $(document).ready(function() {
         });
     });
 
+    $('.debug .js-clear').click(function() {
+        $.get('/api/queue/clear', function() {
+            refreshQueue();
+        });
+    });
+
     refreshQueue();
 });
 
@@ -68,6 +74,7 @@ var playYoutube = function(code) {
 var clearResults = function() {
 
     $('.js-results').html('');
+    $('.results').removeClass('is-visible');
 }
 
 var displayYoutubeResults = function(items) {
@@ -85,5 +92,7 @@ var displayYoutubeResults = function(items) {
         row.data('track', item.snippet);
 
         row.appendTo($('.js-results'));
+
+        $('.results').addClass('is-visible');
     }
 };
