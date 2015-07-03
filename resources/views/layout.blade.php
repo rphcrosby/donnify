@@ -25,9 +25,12 @@
     <div class="player">
         <div class="player__artwork"></div>
         <div class="player__title"></div>
-        <div class="player__play js-play"></div>
+        <div class="player__play js-play">&nbsp;</div>
         <div class="player__track">
-            <div class="js-current-time"></div>
+            <div class="bar">
+                <div class="full"></div>
+                <div class="current"></div>
+            </div>
         </div>
     </div>
 

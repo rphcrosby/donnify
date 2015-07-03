@@ -44,13 +44,28 @@ var pauseYoutube = function() {
     $('#youtube').html('');
 }
 
+var updateBar = function() {
+
+    var track = App.track;
+    var duration = track.details.contentDetails.duration;
+    var lengths = duration.replace('PT', '').split('M');
+    var minutes = lengths[0];
+    var seconds = (minutes * 60) + parseInt(lengths[1].replace('S', ''));
+
+    console.log(seconds);
+
+    var percentage = (App.currentTime / seconds) * 100;
+
+    $('.player .player__track .bar .current').css('width', percentage + '%');
+};
+
 var play = function(ev) {
 
     App.playing = true;
 
     App.timer = setInterval(function() {
         App.currentTime += 1;
-        $('.js-current-time').text(App.currentTime);
+        updateBar();
     }, 1000);
 
     if (App.track) {
