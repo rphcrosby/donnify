@@ -51,12 +51,16 @@ var updateBar = function() {
     var lengths = duration.replace('PT', '').split('M');
     var minutes = lengths[0];
     var seconds = (minutes * 60) + parseInt(lengths[1].replace('S', ''));
-
-    console.log(seconds);
-
     var percentage = (App.currentTime / seconds) * 100;
 
+    var currentMinutes = Math.floor(App.currentTime / 60);
+    var currentSeconds = ("0" + (App.currentTime - (currentMinutes * 60))).slice(-2);
+
+    console.log(currentSeconds);
+
     $('.player .player__track .bar .current').css('width', percentage + '%');
+    $('.player .player__track .bar .bubble').css('left', percentage + '%');
+    $('.player .player__track .bar .bubble').text(currentMinutes + ':' + currentSeconds);
 };
 
 var play = function(ev) {

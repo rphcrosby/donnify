@@ -215,3 +215,17 @@ body {
     left: 0;
 }
 
+.player .player__track .bubble {
+    width: 80px;
+    height: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: #333;
+    top: -25px;
+    left: 0;
+    position: absolute;
+}

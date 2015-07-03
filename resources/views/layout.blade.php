@@ -28,6 +28,7 @@
         <div class="player__play js-play">&nbsp;</div>
         <div class="player__track">
             <div class="bar">
+                <div class="bubble">0:00</div>
                 <div class="full"></div>
                 <div class="current"></div>
             </div>
