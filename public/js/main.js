@@ -15,6 +15,8 @@ $(document).ready(function() {
 
     $('.js-play').click(togglePlay);
 
+    $('.player .player__track').click(skipTo);
+
     refreshQueue();
 });
 
@@ -22,7 +24,21 @@ var App = {
     playing: false,
     track: null,
     timer: null,
-    currentTime: 0
+    currentTime: 0,
+
+    getTrackLength: function() {
+        var duration = App.track.details.contentDetails.duration;
+        var lengths = duration.replace('PT', '').split('M');
+        var minutes = lengths[0];
+        var seconds = parseInt(lengths[1].replace('S', ''));
+        var totalSeconds = (minutes * 60) + seconds;
+
+        return {
+            minutes: lengths[0],
+            seconds: seconds,
+            totalSeconds: totalSeconds
+        };
+    }
 };
 
 var togglePlay = function() {
@@ -32,6 +48,21 @@ var togglePlay = function() {
     } else {
         pause();
     }
+};
+
+var skipTo = function(ev) {
+    var bar = $('.player .player__track').offset().left + 45;
+    var mouseX = ev.clientX;
+    var to = mouseX - bar;
+    var length = $('.player .player__track .bar').width();
+    var percentage = to / length;
+    var trackDuration = App.getTrackLength();
+
+    var targetSeconds = Math.round(percentage * trackDuration.totalSeconds);
+
+    pause();
+    App.currentTime = targetSeconds;
+    play();
 };
 
 var pause = function() {
@@ -47,22 +78,26 @@ var pauseYoutube = function() {
 var updateBar = function() {
 
     var track = App.track;
-    var duration = track.details.contentDetails.duration;
-    var lengths = duration.replace('PT', '').split('M');
-    var minutes = lengths[0];
-    var seconds = (minutes * 60) + parseInt(lengths[1].replace('S', ''));
-    var percentage = (App.currentTime / seconds) * 100;
+    var trackDuration = App.getTrackLength();
+    var percentage = (App.currentTime / trackDuration.totalSeconds) * 100;
 
     var currentMinutes = ("0" + (Math.floor(App.currentTime / 60))).slice(-2);
     var currentSeconds = ("0" + (App.currentTime - (currentMinutes * 60))).slice(-2);
 
-    var totalMinutes = ("0" + minutes).slice(-2);
-    var totalSeconds = ("0" + (seconds - (minutes * 60))).slice(-2);
+    var totalMinutes = ("0" + trackDuration.minutes).slice(-2);
+    var totalSeconds = ("0" + (trackDuration.seconds - (trackDuration.minutes * 60))).slice(-2);
 
     $('.player .player__track .bar .current').css('width', percentage + '%');
     $('.player .player__track .bar .bubble').css('left', percentage + '%');
     $('.player .player__track .bar .bubble').text(currentMinutes + ':' + currentSeconds);
     $('.player .player__duration').text(totalMinutes + ':' + totalSeconds);
+
+    // At the end of the song
+    if (currentMinutes == totalMinutes && currentSeconds == totalSeconds) {
+        pause();
+        App.track = null;
+        play();
+    }
 };
 
 var play = function(ev) {
