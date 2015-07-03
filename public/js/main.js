@@ -53,14 +53,16 @@ var updateBar = function() {
     var seconds = (minutes * 60) + parseInt(lengths[1].replace('S', ''));
     var percentage = (App.currentTime / seconds) * 100;
 
-    var currentMinutes = Math.floor(App.currentTime / 60);
+    var currentMinutes = ("0" + (Math.floor(App.currentTime / 60))).slice(-2);
     var currentSeconds = ("0" + (App.currentTime - (currentMinutes * 60))).slice(-2);
 
-    console.log(currentSeconds);
+    var totalMinutes = ("0" + minutes).slice(-2);
+    var totalSeconds = ("0" + (seconds - (minutes * 60))).slice(-2);
 
     $('.player .player__track .bar .current').css('width', percentage + '%');
     $('.player .player__track .bar .bubble').css('left', percentage + '%');
     $('.player .player__track .bar .bubble').text(currentMinutes + ':' + currentSeconds);
+    $('.player .player__duration').text(totalMinutes + ':' + totalSeconds);
 };
 
 var play = function(ev) {

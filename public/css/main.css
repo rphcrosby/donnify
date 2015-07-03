@@ -187,7 +187,7 @@ body {
 }
 
 .player .player__track {
-    width: calc(100% - 222px);
+    width: calc(100% - 302px);
     float: left;
     height: 80px;
     position: relative;
@@ -228,4 +228,13 @@ body {
     top: -25px;
     left: 0;
     position: absolute;
+}
+
+.player .player__duration {
+    width: 80px;
+    line-height: 80px;
+    height: 80px;
+    text-align: right;
+    color: #fff;
+    float: left;
 }
