@@ -17,7 +17,7 @@ $(document).ready(function() {
 
     $('.player .player__track').click(skipTo);
 
-    refreshQueue();
+    setInterval(refreshQueue, 1000);
 });
 
 var App = {
